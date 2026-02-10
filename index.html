@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>THE TREASURE HUNT | Final Prototype</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
+        
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f9ff; color: #064e3b; scroll-behavior: smooth; }
+        .title-font { font-family: 'Syncopate', sans-serif; }
+        .hidden { display: none; }
+
+        /* PPT-Inspired Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover { transform: translateY(-5px); border-color: #EAB308; }
+
+        /* Custom Buttons */
+        .btn-gold {
+            background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
+            color: #020617; font-weight: 800; text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+        }
+        .btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+            color: white; font-weight: 800; text-transform: uppercase;
+        }
+
+        .nav-item { cursor: pointer; font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #166534; opacity: 0.6; }
+        .nav-item.active { opacity: 1; border-bottom: 2px solid #EAB308; color: #15803d; }
+
+        .terminal {
+            background: #020617; color: #4ade80; font-family: 'Courier New', monospace;
+            padding: 20px; border-radius: 16px; font-size: 12px; height: 200px; overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-green-100 px-8 py-5 flex justify-between items-center">
+        <h1 class="title-font text-sm tracking-[0.3em] text-green-800">TREASURE<span class="text-yellow-500">HUNT</span></h1>
+        <nav class="flex gap-8">
+            <span onclick="visit('map')" id="nav-map" class="nav-item active">MAP</span>
+            <span onclick="visit('permit')" id="nav-permit" class="nav-item">PERMIT</span>
+            <span onclick="visit('vault')" id="nav-vault" class="nav-item">VAULT</span>
+            <span onclick="visit('loot')" id="nav-loot" class="nav-item">LOOT</span>
+        </nav>
+        <div class="flex items-center gap-3 bg-green-50 px-5 py-2 rounded-full border border-green-200">
+            <span class="text-[10px] font-black text-green-700">BALANCE:</span>
+            <span class="text-sm font-black text-slate-900" id="top-balance">10.0 LOOT</span>
+        </div>
+    </header>
+
+    <main id="page-map" class="p-8 max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
+            <div>
+                <h2 class="title-font text-[10px] text-green-600 tracking-[0.5em] uppercase mb-2">Territories</h2>
+                <h3 class="text-3xl font-black text-slate-800">Elite Skill Exchange</h3>
+            </div>
+            <input type="text" id="search" onkeyup="filterSkills()" placeholder="Search (e.g. Python, Logo, FF Rank...)" 
+                class="w-full md:w-96 p-4 rounded-2xl border border-green-100 bg-white shadow-sm outline-none focus:ring-2 focus:ring-yellow-400 transition">
+        </div>
+        <div id="skill-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </main>
+
+    <main id="page-permit" class="hidden p-12 max-w-4xl mx-auto text-center">
+        <div class="glass-card p-20 border-4 border-dashed border-green-200">
+            <h2 class="title-font text-green-900 mb-6 uppercase tracking-widest text-xs">The Permit</h2>
+            <p class="text-5xl font-black text-slate-800 mb-4">ONE TIME INVESTMENT</p>
+            <p class="text-3xl font-black text-green-600">₹100 = 10 LOOT</p>
+            <div class="mt-8 bg-blue-50 p-4 rounded-xl text-blue-700 font-bold text-sm">
+                EXCLUSIVE: COLLEGE DOMAIN ID VERIFICATION REQUIRED
+            </div>
+            <button class="btn-gold px-12 py-5 rounded-2xl mt-10 text-lg hover:scale-105 transition-transform">Get Permit</button>
+        </div>
+    </main>
+
+    <main id="page-vault" class="hidden p-8 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="glass-card p-10 flex flex-col justify-center">
+                <h3 class="title-font text-[10px] text-slate-400 mb-4 uppercase">LOOT AVAILABLE</h3>
+                <div class="flex items-baseline gap-4">
+                    <span class="text-8xl font-black text-slate-900" id="vault-bal">10.0</span>
+                    <span class="text-2xl font-bold text-green-600">≈ ₹100</span>
+                </div>
+                <button onclick="alert('Proceeding to Razorpay...')" class="btn-green w-full py-5 rounded-2xl mt-12 text-lg shadow-xl">REDEEM TO BANK</button>
+            </div>
+            <div class="terminal shadow-2xl">
+                <p class="text-yellow-500 font-black mb-4">[ESCROW SECURITY LOGS]</p>
+                <div id="logs">> Vault Secure...<br>> Status: Awaiting Hunt...</div>
+            </div>
+        </div>
+    </main>
+
+    <main id="page-loot" class="hidden p-8 max-w-4xl mx-auto">
+        <div class="glass-card p-12">
+            <h2 class="title-font text-green-800 mb-10 tracking-[0.4em] uppercase text-center">The Hunters Commission</h2>
+            <div class="space-y-8 font-bold text-slate-700">
+                <div class="flex justify-between items-center border-b pb-6">
+                    <div>
+                        <p class="text-lg">Platform Fee</p>
+                        <p class="text-xs text-slate-400">On every successful "Bounty"</p>
+                    </div>
+                    <span class="text-2xl text-green-600">3%</span>
+                </div>
+                <div class="flex justify-between items-center border-b pb-6">
+                    <p class="text-lg">Loot Trade Tax</p>
+                    <span class="text-2xl text-green-600">1 LOOT</span>
+                </div>
+                <p class="text-center italic text-slate-400 mt-10">"Without investment no loot exchange possible!!"</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
+        <div class="bg-white w-full max-w-xl rounded-[40px] p-10 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-400 to-yellow-400"></div>
+            <button onclick="closeProfile()" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 text-2xl font-black">✕</button>
+            
+            <div class="flex gap-8 items-start">
+                <div class="w-32 h-32 bg-slate-100 rounded-3xl flex items-center justify-center text-5xl shadow-inner">👤</div>
+                <div>
+                    <h2 id="m-name" class="title-font text-2xl text-slate-900">HUNTER</h2>
+                    <p id="m-skill" class="text-green-600 font-black text-xs uppercase tracking-widest mt-1">Skill Category</p>
+                    <div class="mt-4 flex gap-2">
+                        <span class="bg-green-100 text-green-700 text-[10px] px-3 py-1 rounded-full font-bold">VERIFIED</span>
+                        <span class="bg-yellow-100 text-yellow-700 text-[10px] px-3 py-1 rounded-full font-bold">5★ RATING</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 grid grid-cols-2 gap-4">
+                <div class="bg-slate-50 p-6 rounded-3xl">
+                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-2">Expertise</h4>
+                    <p id="m-desc" class="text-sm font-semibold">Verified Student Hunter</p>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-3xl">
+                    <h4 class="text-[10px] font-black text-slate-400 uppercase mb-2">Resume Status</h4>
+                    <button onclick="alert('Opening Digital Portfolio...')" class="text-blue-600 text-sm font-bold hover:underline">View Resume PDF ↗</button>
+                </div>
+            </div>
+
+            <button id="hireBtn" class="btn-gold w-full py-5 rounded-2xl mt-10 text-lg shadow-xl shadow-yellow-500/20">HIRE HUNTER FOR <span id="m-price">0</span> LOOT</button>
+        </div>
+    </div>
+
+    <script>
+        const skills = [
+            { id: 1, name: "Logo Design", cat: "Design Dunes", price: 5, hunter: "Afsheen", desc: "Expert in minimalist branding." },
+            { id: 2, name: "Script & Poetry", cat: "Creative Cove", price: 3, hunter: "Tehzeeb", desc: "Professional script & personalized verse." },
+            { id: 3, name: "FF Max Rank Push", cat: "Gaming Glade", price: 8, hunter: "Laiba", desc: "Grandmaster rank push specialist." },
+            { id: 4, name: "Python Automation", cat: "Coding", price: 10, hunter: "CSE Pro", desc: "Custom scripts for data handling." },
+            { id: 5, name: "IoT Dashboard", cat: "Project", price: 15, hunter: "IoT Squad", desc: "Blynk and ThingSpeak integration." }
+        ];
+
+        // Populate 50+ unique real skills
+        const baseSkills = ["C++ Debugging", "Java Swing UI", "Canva Slides", "Digital Art", "Video VFX", "SQL Database", "Lab Record Writing", "Physics Numerical", "App UI/UX", "Notes Summarizer", "Academic Research", "Event Poster", "Arduino Circuit", "Excel Macro", "Case Study Help"];
+        for(let i=6; i<=55; i++) {
+            const name = baseSkills[i % baseSkills.length] + " #" + i;
+            skills.push({
+                id: i, name: name, cat: "Freelance", price: (Math.random()*12 + 2).toFixed(1),
+                hunter: "Hunter_" + i, desc: "High-quality campus service."
+            });
+        }
+
+        let balance = 10.0;
+
+        function visit(pageId) {
+            document.querySelectorAll('main').forEach(m => m.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.remove('hidden');
+            document.getElementById('nav-' + pageId).classList.add('active');
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('skill-grid');
+            grid.innerHTML = data.map(s => `
+                <div class="glass-card p-8 flex flex-col justify-between group">
+                    <div>
+                        <span class="text-[9px] font-black bg-green-100 text-green-700 px-3 py-1 rounded-full uppercase tracking-tighter">${s.cat}</span>
+                        <h3 class="font-extrabold text-xl mt-4 text-slate-800 group-hover:text-green-700 transition">${s.name}</h3>
+                        <p class="text-xs text-slate-400 mt-2 italic">Hunter: ${s.hunter}</p>
+                    </div>
+                    <div class="mt-8 flex justify-between items-center border-t border-slate-50 pt-6">
+                        <span class="text-2xl font-black text-slate-900">${s.price} <span class="text-xs">LOOT</span></span>
+                        <button onclick="openProfile(${s.id})" class="text-[10px] font-black bg-slate-900 text-white px-4 py-2 rounded-xl">VIEW PROFILE</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openProfile(id) {
+            const s = skills.find(x => x.id === id);
+            document.getElementById('m-name').innerText = s.hunter;
+            document.getElementById('m-skill').innerText = s.name;
+            document.getElementById('m-price').innerText = s.price;
+            document.getElementById('m-desc').innerText = s.desc;
+            document.getElementById('hireBtn').onclick = () => startBounty(s.price, s.hunter);
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeProfile() { document.getElementById('modal').classList.add('hidden'); }
+
+        function startBounty(price, hunter) {
+            if (balance < price) { alert("Insufficient Loot in Vault!"); return; }
+            balance -= price;
+            updateUI();
+            closeProfile();
+            visit('vault');
+            log(`ESCROW: Holding ${price} Loot for Bounty with ${hunter}...`, "white");
+            setTimeout(() => {
+                const fee = (price * 0.03).toFixed(2);
+                log(`REVENUE: 3% Platform Fee (${fee}) Deducted.`, "#FACC15");
+                log(`SUCCESS: Bounty Approved. Hunter Paid.`, "#4ade80");
+            }, 2000);
+        }
+
+        function log(m, color) {
+            const l = document.getElementById('logs');
+            l.innerHTML += `<br><span style="color:${color}">> ${m}</span>`;
+            l.scrollTop = l.scrollHeight;
+        }
+
+        function updateUI() {
+            document.getElementById('top-balance').innerText = balance.toFixed(1) + " LOOT";
+            document.getElementById('vault-bal').innerText = balance.toFixed(1);
+        }
+
+        function filterSkills() {
+            const val = document.getElementById('search').value.toLowerCase();
+            renderGrid(skills.filter(s => s.name.toLowerCase().includes(val) || s.cat.toLowerCase().includes(val)));
+        }
+
+        renderGrid(skills);
+    </script>
+</body>
+</html>
