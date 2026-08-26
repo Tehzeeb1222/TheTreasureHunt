@@ -40,6 +40,7 @@ This project is a front-end prototype.
 
 The payment system, user authentication, database, and real Razorpay integration are currently simulated and are not connected to a live backend.
 
+
 🔮 Future Improvements
 User authentication and college email verification
 Real database integration
