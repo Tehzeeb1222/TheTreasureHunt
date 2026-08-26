@@ -33,6 +33,11 @@ Open index.html in a web browser.
 Explore the Treasure Hunt prototype.
 
 No server or database is required for this prototype.
+SCREENSHOTS:
+MAP.png
+LOOT.png
+VAULT.png
+PROFILE.png
 
 ⚠️ Current Status
 
