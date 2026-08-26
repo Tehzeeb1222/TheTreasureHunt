@@ -1,4 +1,7 @@
 The Treasure Hunt 🏴‍☠️
+ 🚀 Live Demo
+
+[**View The Treasure Hunt →**](https://tehzeeb1222.github.io/TheTreasureHunt/)
 
 An interactive campus skill-exchange marketplace prototype where students can discover, offer, and exchange skills using a virtual currency called LOOT.
 
